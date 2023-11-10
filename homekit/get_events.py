@@ -19,10 +19,14 @@
 import argparse
 import sys
 import logging
+import requests
 
 from homekit.controller import Controller
 from homekit.log_support import setup_logging, add_log_arguments
+from homekit.openhab_rest import post_oh_homekit_item
 
+url = "http://192.168.178.180:8080/rest/items/HomeKitPythonRest"
+headers = {'Content-Type': 'text/plain', 'Accept':'application/json'}
 
 def setup_args_parser():
     parser = argparse.ArgumentParser(description='HomeKit get_events app - listens to events from accessories')
@@ -43,6 +47,7 @@ def setup_args_parser():
 def func(events):
     for event in events:
         print('event for {aid}.{iid}: {event}'.format(aid=event[0], iid=event[1], event=event[2]))
+        post_oh_homekit_item(event)
 
 
 if __name__ == '__main__':
